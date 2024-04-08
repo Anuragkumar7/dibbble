@@ -20,13 +20,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Check if the username is already taken
         $check_username_sql = "SELECT * FROM signup WHERE username='$username'";
-        $result = mysqli_query($conn, $check_username_sql);
-        if (mysqli_num_rows($result) > 0) {
+        $result_username = mysqli_query($conn, $check_username_sql);
+        if (mysqli_num_rows($result_username) > 0) {
             $username_error = "Username is already taken. Please choose a different username.";
         }
 
+        // Check if the email is already registered
+        $check_email_sql = "SELECT * FROM signup WHERE email='$email'";
+        $result_email = mysqli_query($conn, $check_email_sql);
+        if (mysqli_num_rows($result_email) > 0) {
+            $email_error = "Email is already registered. Please use a different email address.";
+        }
+
         // If there are no errors, proceed with inserting data into the database
-        if (!isset($username_error)) {
+        if (!isset($username_error) && !isset($email_error)) {
             // Hash the password (for better security)
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
@@ -83,6 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <div class="text-start">
                             <h4 class="mt-1 mb-4 text-start fw-bolder" style="font-weight: 800;">Sign up to Dribbble</h4>
                             <?php if (isset($username_error)) echo "<p class='text-danger' id='username_error'>$username_error</p>"; ?>
+                            <?php if(isset($email_error)) echo "<p class='text-danger' id='email_error'>$email_error</p>";?>
                         </div>
                         <div class="row mb-2">
                             <form action="" method="post">
@@ -132,12 +140,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (document.getElementById('username_error')) {
                 setTimeout(function() {
                     document.getElementById('username_error').style.display = 'none';
-                }, 2000); // Adjust the timeout duration (in milliseconds) as needed
+                }, 5000); // Adjust the timeout duration (in milliseconds) as needed
+            }
+            if (document.getElementById('email_error')) {
+                setTimeout(function() {
+                    document.getElementById('email_error').style.display = 'none';
+                }, 5000); // Adjust the timeout duration (in milliseconds) as needed
             }
             if (document.getElementById('success_msg')) {
                 setTimeout(function() {
                     document.getElementById('success_msg').style.display = 'none';
-                }, 2000); // Adjust the timeout duration (in milliseconds) as needed
+                }, 5000); // Adjust the timeout duration (in milliseconds) as needed
             }
         };
     </script>
