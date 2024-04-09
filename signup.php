@@ -72,7 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <div class="text-white px-3 py-4 p-md-5 mx-md-4">
                             <h1 class="fw-bold" style="color: #A9893B; font-family: 'Butterfly Kids', cursive;">Dribbble</h1>
                             <h4 class="mb-4">Discover the world's top Designers & Creatives.</h4>
-                            <img style="width: 100%;" src="images/19198997.jpg" alt="">
+                            <img style="width: 100%; mix-blend-mode: multiply;" src="images/19198997.jpg" alt="">
                             <p class="mt-3" style="color: #A9893B;">Art by <a href="" style="color: #A9893B;">Peter Tarka</a></p>
                         </div>
                     </div>
