@@ -55,68 +55,68 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <?php
-    include 'link.php';
-    ?>
+    <?php include 'link.php'; ?>
 </head>
 
 <body>
-    <div class="vh-100 d-flex" style="margin-top: -50px;">
-        <div class="container my-5 gradient-form ">
+    <div class="vh-100 d-flex">
+        <div class="container gradient-form" style="margin-left: 0px;">
             <div class="row vh-100">
-                <div class="col-md-5" style="background-color: #F2D184; margin-left: -170px;">
+                <!-- Hide left side on small devices -->
+                <div class="col-md-5 d-none d-md-block" style="background-color: #F2D184;">
                     <div class="d-flex flex-column justify-content-center gradient-custom-2 h-100 mb-4">
                         <div class="text-white px-3 py-4 p-md-5 mx-md-4">
-                            <h1 style="color: #A9893B; font-family: 'Butterfly Kids', cursive;
-                               font-weight: 400;
-                                font-style: normal; padding-bottom: 120px;">Dribbble</h1>
-                            <h4 class="mb-4" style="color: #7e6932;">Discover the world's top Designers & Creatives.</h4>
-                            <img style="width: 350px; mix-blend-mode: multiply;" src="images/19198997.jpg" alt="">
-
-                            <p style="color: #A9893B;">Art by <a href="" style="color: #A9893B;">Peter Tarka</a></p>
+                            <h1 class="fw-bold" style="color: #A9893B; font-family: 'Butterfly Kids', cursive;">Dribbble</h1>
+                            <h4 class="mb-4">Discover the world's top Designers & Creatives.</h4>
+                            <img style="width: 100%;" src="images/19198997.jpg" alt="">
+                            <p class="mt-3" style="color: #A9893B;">Art by <a href="" style="color: #A9893B;">Peter Tarka</a></p>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-7" style="margin-left: 170px;">
-                    <div class="d-flex flex-column ms-5">
+                <div class="col-md-7 pt-5">
+                    <div class="d-flex flex-column ms-md-5">
                         <div class="text-right">
-                            <p class="text-end" style="margin-top: 40px; font-weight: 600;">Already a member? <a href="login.php" class="text-decoration-none">Sign in</a></p>
+                            <p class="text-end mt-4 mb-0" style="font-weight: 600;">Already a member? <a href="login.php" class="text-decoration-none">Sign in</a></p>
                         </div>
-                        <div class="text-start">
-                            <h4 class="mt-1 mb-4 text-start fw-bolder" style="font-weight: 800;">Sign up to Dribbble</h4>
+                        <div class="text-start mt-md-1">
+                            <h4 class="mt-1 mb-4 fw-bolder">Sign up to Dribbble</h4>
                             <?php if (isset($username_error)) echo "<p class='text-danger' id='username_error'>$username_error</p>"; ?>
                             <?php if(isset($email_error)) echo "<p class='text-danger' id='email_error'>$email_error</p>";?>
                         </div>
                         <div class="row mb-2">
-                            <form action="" method="post">
-                                <div class="row mb-2">
-                                    <div class="col-md-6">
-                                        <p class="mb-1" style="font-weight: 600;">Name</p>
-                                        <input class="form-control mb-4" type="text" id="name1" name="name" placeholder="Name" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <p class="mb-1" style="font-weight: 600;">Username</p>
-                                        <input class="form-control mb-4" type="text" id="username1" name="username" placeholder="Unique username..." required>
+                            <form action="" method="post" class="w-100">
+                                <div class="col-md-12 mb-4">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-4">
+                                            <p class="mb-1" style="font-weight: 600;">Name</p>
+                                            <input class="form-control" type="text" id="name1" name="name" placeholder="Name" required>
+                                        </div>
+                                        <div class="col-md-6 mb-4">
+                                            <p class="mb-1" style="font-weight: 600;">Username</p>
+                                            <input class="form-control" type="text" id="username1" name="username" placeholder="Unique username..." required>
+                                        </div>
                                     </div>
                                 </div>
-                                <!-- Email, password, and checkbox fields -->
-                                <p class=" mb-1" style="font-weight: 600;">Email</p>
-                                <input class="form-control mb-4" type="email" id="form1" name="email" placeholder="example@gmail.com" required>
-                                <p class="mb-1" style="font-weight: 600;">Password</p>
-                                <input class="form-control mb-4" type="password" id="form2" name="password" placeholder="6+ characters" required>
-                                <div class="form-check mb-4">
+                                <div class="col-md-12 mb-4">
+                                    <p class=" mb-1" style="font-weight: 600;">Email</p>
+                                    <input class="form-control" type="email" id="form1" name="email" placeholder="example@gmail.com" required>
+                                </div>
+                                <div class="col-md-12 mb-4">
+                                    <p class="mb-1" style="font-weight: 600;">Password</p>
+                                    <input class="form-control" type="password" id="form2" name="password" placeholder="6+ characters" required>
+                                </div>
+                                <div class="form-check mb-4 col-md-12">
                                     <input class="form-check-input" type="checkbox" id="agreeCheck" name="agreeCheck" required>
                                     <label class="form-check-label" for="agreeCheck">
                                         Creating an account means you're okay with our <a href="" class="text-decoration-none">Terms of Service, Privacy Policy,</a> and our default <a href="" class="text-decoration-none">Notification Settings.</a>
                                     </label>
                                 </div>
-                                <div class="text-start pt-1 mb-4 pb-1">
-                                    <button class="btn btn-primary w-50 gradient-custom-2" style="background-color: #E34D8A; border-color: #E34D8A;" name="submit">Create Account</button>
+                                <div class="col-md-12 pt-1 mb-4 pb-1">
+                                    <button class="btn btn-primary w-100 gradient-custom-2" style="background-color: #E34D8A; border-color: #E34D8A;" name="submit">Create Account</button>
                                     <?php if (isset($sql)) echo "<p class='text-danger' id='success_msg'>$succ</p>" ?>
                                 </div>
                             </form>
@@ -140,17 +140,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (document.getElementById('username_error')) {
                 setTimeout(function() {
                     document.getElementById('username_error').style.display = 'none';
-                }, 5000); // Adjust the timeout duration (in milliseconds) as needed
+                }, 3000); // Adjust the timeout duration (in milliseconds) as needed
             }
             if (document.getElementById('email_error')) {
                 setTimeout(function() {
                     document.getElementById('email_error').style.display = 'none';
-                }, 5000); // Adjust the timeout duration (in milliseconds) as needed
+                }, 3000); // Adjust the timeout duration (in milliseconds) as needed
             }
             if (document.getElementById('success_msg')) {
                 setTimeout(function() {
                     document.getElementById('success_msg').style.display = 'none';
-                }, 5000); // Adjust the timeout duration (in milliseconds) as needed
+                }, 3000); // Adjust the timeout duration (in milliseconds) as needed
             }
         };
     </script>

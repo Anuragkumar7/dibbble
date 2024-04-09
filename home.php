@@ -50,18 +50,17 @@ if (!$verified && !$verificationSent) {
     $verificationMessage = "";
 
     try {
-       
         //Server settings
         $mail->isSMTP();
         $mail->Host       = $_ENV['HOST']; // SMTP server
         $mail->SMTPAuth   = true;
-        $mail->Username   = $ENV['EMAIL']; // SMTP username
+        $mail->Username   = $_ENV['EMAIL']; // SMTP username
         $mail->Password   = $_ENV['APP_PASS']; // SMTP password
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port       = 587; // SMTP port
 
         //Recipients
-        $mail->setFrom($ENV['EMAIL'], 'Dribbble');
+        $mail->setFrom($_ENV['EMAIL'], 'Dribbble');
         $mail->addAddress($email); // Add a recipient
 
         // Content
@@ -81,31 +80,19 @@ if (!$verified && !$verificationSent) {
     $verificationMessage = $verified ? "Email already verified." : "Verification email already sent.";
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $verified = $_POST["verification_code"];
 
-    // Retrieve the verification code from the database
-    $databasecode = "SELECT verification_code FROM signup WHERE email ='$email'";
-    $result = mysqli_query($conn, $databasecode);
+$query = mysqli_query($conn, "SELECT * FROM images ORDER BY uploaded_on DESC LIMIT 1");
 
-    if ($result) {
-        $row = mysqli_fetch_assoc($result);
-        $verificationCode = $row['verification_code'];
+$imageURL = '';
 
-        if ($verified != $verificationCode) {
-            $verificationSuccess = false;
-            $verificationMessage = "Verification code is incorrect.";
-        } else {
-            // If verification code is correct, update verified status in database
-            $update_verified_sql = "UPDATE signup SET verified = 1 WHERE email = '$email'";
-            mysqli_query($conn, $update_verified_sql);
-            $verificationMessage = "Email verified successfully.";
-        }
-    } else {
-        echo "Error retrieving verification code from the database: " . mysqli_error($conn);
-    }
+if ($query->num_rows > 0) {
+    // Fetch the latest uploaded image
+    $row = $query->fetch_assoc();
+    $imageURL = 'uploads/' . $row["file_name"];
+} else {
+    // If no profile picture uploaded, show default picture
+    $imageURL = 'default_profile_picture.jpg'; // Change to the path of your default profile picture
 }
-
 ?>
 
 
@@ -151,24 +138,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <li class="nav-item">
                         <a class="nav-link fw-bold" href="">Hire Designers</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link fw-bold" href="logout.php">Logout</a>
-                    </li>
+                  
                 </ul>
+
                 <form class="d-flex" role="search">
 
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-
+                    <i class="fa-solid fa-business-time fa-2x me-3"></i>
+                    <div class="dropdown">
+                        <button class="btn dropdown-toggle me-3 border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="<?php echo $imageURL ?>" class="border border-secondary me-3" style="width: 35px; border-radius: 50%; " alt="...">
+                            
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="profile.php">Profile</a></li>
+                            <li><a class="dropdown-item" href="card.php">Hire</a></li>
+                            <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+                        </ul>
+                    </div>
                     <button class="btn btn-primary" style="background-color: #E34D8A; border-color:#E34D8A;" type="submit">Upload</button>
                 </form>
             </div>
         </div>
     </nav>
 
-    <?php if ($verified ==0 ) : ?>
-        <main class="container my-5">
+    <?php if ($verified == 0) : ?>
+        <main class="container my-4">
             <div class="row justify-content-center">
-                <div class="col-md-6">
+                <div class="">
                     <div class="card">
                         <div class="card-body text-center">
                             <h2 class="card-title mb-4">Please verify your email...</h2>
@@ -179,24 +176,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <p class="card-text mb-4"><strong><?php echo $email; ?></strong></p>
                             <form action="" method="post">
                                 <label for="verification_code">Enter Verification Code:</label>
-                                <input type="text" id="verification_code" name="verification_code" required>
-                                <button type="submit">Verify</button>
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control " style="margin: 5px 500px;" id="verification_code" name="verification_code" required aria-label="Text input with checkbox">
+                                </div>
+                                <!-- <input type="text" class="flow-control" id="verification_code" name="verification_code" required> -->
+                                <button type="submit" class="btn btn-primary" style="background-color: #E34D8A; border-color:#E34D8A;">Verify</button>
                             </form>
- 
+
                             <p class="card-text">Click the confirmation link in that email to begin using Dribbble.</p>
-                            <p class="card-text">Didn't receive the email? Check your Spam folder, it may have been caught by a filter. If you still don't see it, you can <a href="#">resend the confirmation email</a>.</p>
-                            <p class="card-text">Wrong email address? <a href="#">Change it</a>.</p>
+                            <p class="card-text">Didn't receive the email? Check your Spam folder, it may have been caught by a filter. If you still don't see it, you can <a href="#" class="fw-bold" style="text-decoration: none; color:#E34D8A;">resend the confirmation email</a>.</p>
+                            <p class="card-text">Wrong email address? <a href="newmail.php" class="fw-bold" style="text-decoration: none; color:#E34D8A;">Change it</a>.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </main>
-        <?php else : ?>
+    <?php else : ?>
         <div class="alert alert-danger" role="alert">
             <?php echo $verificationMessage;
             ?>
         </div>
     <?php endif; ?>
+
 
     <footer class="bg-light py-5">
         <div class="container">
@@ -298,7 +299,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
 </body>
 
 </html>
